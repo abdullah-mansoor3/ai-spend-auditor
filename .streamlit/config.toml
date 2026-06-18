@@ -1,0 +1,15 @@
+[theme]
+base = "dark"
+primaryColor = "#00C896"          # green — used for savings highlights
+backgroundColor = "#0E1117"
+secondaryBackgroundColor = "#161B22"
+textColor = "#E6EDF3"
+font = "sans serif"
+
+[server]
+maxUploadSize = 10                # 10MB max file upload
+enableCORS = false
+enableXsrfProtection = true
+
+[browser]
+gatherUsageStats = false

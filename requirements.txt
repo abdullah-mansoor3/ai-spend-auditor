@@ -1,0 +1,11 @@
+streamlit==1.45.1
+pandas==2.2.3
+numpy==1.26.4
+sentence-transformers==3.4.1
+scikit-learn==1.6.1
+posthog==3.14.1
+groq==0.25.0
+requests==2.34.2
+python-dotenv==1.1.0
+PyMuPDF==1.25.5
+reportlab==4.2.5
