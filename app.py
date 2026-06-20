@@ -59,6 +59,75 @@ from src.report import generate_report_narrative
 
 logger = logging.getLogger(__name__)
 
+
+def inject_tally_feedback_popup() -> None:
+    """Add the Tally feedback popup trigger to the Streamlit page."""
+    components.html(
+        """
+<script>
+(function () {
+  const FORM_ID = "Pd4ENe";
+  const SCRIPT_SRC = "https://tally.so/widgets/embed.js";
+  const BUTTON_ID = "tally-feedback-popup-button";
+
+  function install(doc) {
+    if (!doc || doc.getElementById(BUTTON_ID)) return;
+    const win = doc.defaultView || window;
+
+    if (!doc.querySelector('script[src="' + SCRIPT_SRC + '"]')) {
+      const script = doc.createElement("script");
+      script.async = true;
+      script.src = SCRIPT_SRC;
+      script.onload = function () {
+        if (win.Tally && win.Tally.loadEmbeds) win.Tally.loadEmbeds();
+      };
+      doc.head.appendChild(script);
+    }
+
+    const button = doc.createElement("button");
+    button.id = BUTTON_ID;
+    button.type = "button";
+    button.textContent = "Feedback";
+    button.setAttribute("data-tally-open", FORM_ID);
+    button.setAttribute("data-tally-emoji-text", "👋");
+    button.setAttribute("data-tally-emoji-animation", "wave");
+    button.addEventListener("click", function () {
+      if (win.Tally && win.Tally.openPopup) {
+        win.Tally.openPopup(FORM_ID, {
+          emoji: { text: "👋", animation: "wave" }
+        });
+      }
+    });
+    button.style.cssText = [
+      "position:fixed",
+      "right:18px",
+      "bottom:18px",
+      "z-index:2147483647",
+      "border:1px solid rgba(0,200,150,0.65)",
+      "border-radius:999px",
+      "background:#00C896",
+      "color:#07110e",
+      "font:600 14px/1.1 Inter, sans-serif",
+      "padding:11px 16px",
+      "box-shadow:0 8px 24px rgba(0,0,0,0.28)",
+      "cursor:pointer"
+    ].join(";");
+
+    doc.body.appendChild(button);
+    if (win.Tally && win.Tally.loadEmbeds) win.Tally.loadEmbeds();
+  }
+
+  try {
+    install(window.parent.document);
+  } catch (err) {
+    install(document);
+  }
+})();
+</script>
+        """,
+        height=0,
+    )
+
 # ─────────────────────────────────────────────
 # Page config
 # ─────────────────────────────────────────────
@@ -68,6 +137,8 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="collapsed",
 )
+
+inject_tally_feedback_popup()
 
 # ─────────────────────────────────────────────
 # Custom CSS
